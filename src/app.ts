@@ -4,6 +4,7 @@ import program = require("commander");
 import app, { Launcher } from "./launcher";
 
 import Scheduler from "./scheduler";
+import PeriodJob from "./period-job";
 
 function main() {
     program.version("1.0.0")
@@ -25,6 +26,8 @@ function main() {
     launcher.TimeOfTowerPort = program.totport ? Number(program.totport) : program.totport;
 
     const scheduler = new Scheduler();
+    const periodJob = new PeriodJob();
+    scheduler.registerJob(periodJob);
     scheduler.run()
         .then(result => console.log("scheduler finished"))
         .catch(error => console.log.bind(console));
