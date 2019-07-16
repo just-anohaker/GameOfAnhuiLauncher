@@ -20,17 +20,22 @@ class SecretRandomer {
 
 function getTime() {
     const t = new Date();
-    const y = t.getFullYear(), m = t.getMonth(), d = t.getDate(),
-        h = t.getHours(), mm = t.getMinutes(), s = t.getSeconds();
+    const y = String(t.getFullYear()).padStart(4, "0"),
+        m = String(t.getMonth() + 1).padStart(2, "0"),
+        d = String(t.getDate()).padStart(2, "0"),
+        h = String(t.getHours()).padStart(2, "0"),
+        mm = String(t.getMinutes()).padStart(2, "0"),
+        s = String(t.getSeconds()).padStart(2, "0");
     return `${y}-${m}-${d} ${h}:${mm}:${s}`;
 }
 
 interface Period {
+    readonly PeriodName: string;
+
     update(duration: number): Promise<UpdateResult>;
 }
 
 abstract class PeriodStatus implements Period {
-    protected _name?: string;
     protected _dapp: ETMDapp;
     protected _id: string;
     protected _tr: string;
@@ -45,6 +50,12 @@ abstract class PeriodStatus implements Period {
         this._trBlocked = trBlock;
         this._trDuration = 0;
         this._trElapsedTime = 0;
+
+        console.log(`[${this.PeriodName} ${getTime()}] ctor:id(${this._id}),tr(${this._tr}),blocked(${this._trBlocked})`);
+    }
+
+    get PeriodName() {
+        return "PeriodStatus";
     }
 
     protected reset(tr: string = "", blocked: boolean = false, duration: number = 0, interval: number = 0): void {
@@ -61,7 +72,7 @@ abstract class PeriodStatus implements Period {
                 if (this._tr === "") {
                     const startPeriod = await this.period(this._id);
                     this.reset(startPeriod.transactionId);
-                    console.log(`[${this._name} ${getTime()}]submit transaction:${this._id}, ${startPeriod.transactionId}`);
+                    console.log(`[${this.PeriodName} ${getTime()}]submit transaction:${this._id}, ${startPeriod.transactionId}`);
                 } else if (!this._trBlocked) {
                     if (this._trElapsedTime < trCheckDuration) {
                         this._trElapsedTime += duration;
@@ -69,10 +80,10 @@ abstract class PeriodStatus implements Period {
                     }
                     this._trElapsedTime = duration;
                     const isTrBlock = await this._dapp.isTransactionBlocked(this._tr);
-                    console.log(`[${this._name} ${getTime()}] check transaction: ${this._tr} - ${isTrBlock}`);
+                    console.log(`[${this.PeriodName} ${getTime()}] check transaction: ${this._tr} - ${isTrBlock}`);
                     if (!isTrBlock) {
                         const isTrUnconfirmed = await this._dapp.isTransactionUnconfirmed(this._tr);
-                        console.log(`[${this._name} ${getTime()}] check unconfirmed transaction: ${this._tr} - ${isTrUnconfirmed}`);
+                        console.log(`[${this.PeriodName} ${getTime()}] check unconfirmed transaction: ${this._tr} - ${isTrUnconfirmed}`);
                         if (!isTrUnconfirmed) {
                             this.reset();
                         }
@@ -95,7 +106,9 @@ abstract class PeriodStatus implements Period {
 }
 
 class PeriodStart extends PeriodStatus implements Period {
-    protected _name: string = "PeriodStart";
+    get PeriodName() {
+        return "PeriodStart";
+    }
 
     async period(periodId: string): Promise<any> {
         return await this._dapp.startPeriod(SecretRandomer.getSecret(), periodId);
@@ -112,7 +125,9 @@ class PeriodStart extends PeriodStatus implements Period {
 }
 
 class PeriodMothball extends PeriodStatus implements Period {
-    protected _name: string = "PeriodMothball";
+    get PeriodName() {
+        return "PeriodMothball";
+    }
 
     async period(periodId: string): Promise<any> {
         return await this._dapp.mothballPeriod(SecretRandomer.getSecret(), periodId);
@@ -129,9 +144,11 @@ class PeriodMothball extends PeriodStatus implements Period {
 }
 
 class PeriodEnd extends PeriodStatus implements Period {
-    protected _name: string = "PeriodEnd";
-
     private _timeOfTower: TimeOfTower = new TimeOfTower();
+
+    get PeriodName() {
+        return "PeriodEnd";
+    }
 
     async period(periodId: string): Promise<any> {
         const endInfo = await this._timeOfTower.getPoints();
@@ -157,7 +174,14 @@ class PeriodIdle implements Period {
     constructor() {
         this._dapp = new ETMDapp();
         this._duration = 0;
+
+        console.log(`[${this.PeriodName} ${getTime()}] ctor`);
     }
+
+    get PeriodName() {
+        return "PeriodIdle";
+    }
+
     async update(duration: number): Promise<UpdateResult> {
         try {
             const period = await this._dapp.getCurrentPeriod();
