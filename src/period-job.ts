@@ -51,7 +51,7 @@ abstract class PeriodStatus implements Period {
         this._trDuration = 0;
         this._trElapsedTime = 0;
 
-        console.log(`[${this.PeriodName} ${getTime()}] ctor:id(${this._id}),tr(${this._tr}),blocked(${this._trBlocked})`);
+        console.log(`[${this.PeriodName} ${getTime()}] ctor:id(${this._id}),tr(${this._tr ? this._tr : "--"}),blocked(${this._trBlocked})`);
     }
 
     get PeriodName() {
@@ -72,7 +72,7 @@ abstract class PeriodStatus implements Period {
                 if (this._tr === "") {
                     const startPeriod = await this.period(this._id);
                     this.reset(startPeriod.transactionId);
-                    console.log(`[${this.PeriodName} ${getTime()}]submit transaction:${this._id}, ${startPeriod.transactionId}`);
+                    console.log(`[${this.PeriodName} ${getTime()}] submit transaction:${this._id}, ${startPeriod.transactionId}`);
                 } else if (!this._trBlocked) {
                     if (this._trElapsedTime < trCheckDuration) {
                         this._trElapsedTime += duration;
