@@ -4,14 +4,14 @@ const START_MINUTE = 40;
 
 const PERIOD_MAX_TIMES = Number.MAX_SAFE_INTEGER;
 
-const PERIOD_PER_DURATION_M = 4;
+const PERIOD_PER_DURATION_M = 20;
 const PERIOD_PER_DURATION_S = PERIOD_PER_DURATION_M * 60;
 const PERIOD_PER_DURATION_MS = PERIOD_PER_DURATION_S * 1000;
 
 const ONE_MINUTE = 60 * 1000;
 
-export const START_DURATION = 2 * 60 * 1000; // 17 * 60 * 1000;
-export const MOTHBALL_DURATION = Math.floor(1.5 * 60 * 1000);
+export const START_DURATION = 17 * 60 * 1000; // 17 * 60 * 1000;
+export const MOTHBALL_DURATION = Math.floor(2.5 * 60 * 1000);
 export const END_DURATION = Math.floor(0.5 * 60 * 1000);
 
 export class Timeline {
