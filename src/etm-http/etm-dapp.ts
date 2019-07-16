@@ -60,7 +60,7 @@ class ETMDapp {
     async getCurrentPeriod(): Promise<Period | undefined> {
         try {
             const respPeriod = await http.get(launcher.getDappServer() + "/game/period");
-            console.log("[getCurrentPeriod]:", respPeriod);
+            console.log("[getCurrentPeriod]:", JSON.stringify(respPeriod));
             if (respPeriod.result) {
                 const result = respPeriod.result;
                 const resp: Period = { id: result.id, status: result.status };
@@ -86,7 +86,7 @@ class ETMDapp {
         const host = launcher.getDappServer();
         const url = host + `/transactions/${trId}`;
         const resp = await http.get(url);
-        console.log("[isTransactionBlocked]:", trId, resp);
+        console.log("[isTransactionBlocked]:", trId, JSON.stringify(resp));
         return true;
     }
 
@@ -94,7 +94,7 @@ class ETMDapp {
         const host = launcher.getDappServer();
         const url = host + `/transactions/unconfirmed`;
         const resp = await http.get(url);
-        console.log("[isTransactionUnconfirmed]:", trId, resp);
+        console.log("[isTransactionUnconfirmed]:", trId, JSON.stringify(resp));
         let transactions: any[] = resp.data.transactions;
         return transactions.some(tr => tr.id === trId);
     }

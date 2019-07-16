@@ -29,7 +29,6 @@ function main() {
     const periodJob = new PeriodJob();
     scheduler.registerJob(periodJob);
     scheduler.run()
-        .then(result => console.log("scheduler finished"))
         .catch(error => console.log.bind(console));
 
     process.on("uncaughtException", (...args) => { console.log("app uncaughtException:", ...args) });

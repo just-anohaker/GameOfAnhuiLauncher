@@ -150,20 +150,28 @@ class PeriodEnd extends PeriodStatus implements Period {
 
 class PeriodIdle implements Period {
     private _dapp: ETMDapp;
+    private _duration: number;
+
+    static IDLE_INTERVAL: number = 2 * 1000;
 
     constructor() {
         this._dapp = new ETMDapp();
+        this._duration = 0;
     }
     async update(duration: number): Promise<UpdateResult> {
-        void duration;
-
         try {
             const period = await this._dapp.getCurrentPeriod();
             if (period === undefined || period.status === 2) {
-                console.log("[PeriodIdle] checkNextPeriod");
-                return await this._checkNextPeriod();
+                this._duration += duration;
+                if (this._duration > PeriodIdle.IDLE_INTERVAL) {
+                    console.log("[PeriodIdle] checkNextPeriod");
+                    this._duration = 0;
+                    return await this._checkNextPeriod();
+                }
+                throw new Error("elapsed time is not enough...");
             }
 
+            this._duration = 0;
             // console.log("period.status", period.status, period);
             if (period.status === 0) {
                 return new PeriodStart(period.id, period.startTr!, true);
@@ -173,6 +181,7 @@ class PeriodIdle implements Period {
                 return new PeriodEnd(period.id, period.endTr!, true);
             }
         } catch (error) { }
+
         return undefined;
     }
 
