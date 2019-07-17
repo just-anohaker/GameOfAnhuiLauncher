@@ -173,7 +173,7 @@ class PeriodIdle implements Period {
 
     constructor() {
         this._dapp = new ETMDapp();
-        this._duration = 0;
+        this._duration = PeriodIdle.IDLE_INTERVAL;
 
         console.log(`[${this.PeriodName} ${getTime()}] ctor`);
     }
@@ -187,7 +187,7 @@ class PeriodIdle implements Period {
             const period = await this._dapp.getCurrentPeriod();
             if (period === undefined || period.status === 2) {
                 this._duration += duration;
-                if (this._duration > PeriodIdle.IDLE_INTERVAL) {
+                if (this._duration >= PeriodIdle.IDLE_INTERVAL) {
                     console.log("[PeriodIdle] checkNextPeriod");
                     this._duration = 0;
                     return await this._checkNextPeriod();
@@ -195,7 +195,7 @@ class PeriodIdle implements Period {
                 throw new Error("elapsed time is not enough...");
             }
 
-            this._duration = 0;
+            this._duration = PeriodIdle.IDLE_INTERVAL;
             // console.log("period.status", period.status, period);
             if (period.status === 0) {
                 return new PeriodStart(period.id, period.startTr!, true);
