@@ -1,0 +1,30 @@
+{
+  "name": "game_of_anhui_launcher",
+  "version": "1.0.0",
+  "description": "Launcher for game of anhui kuai3",
+  "main": "index.js",
+  "dependencies": {
+    "axios": "^0.19.0",
+    "commander": "^2.20.0"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.6",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.5.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx ts-node src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/just-anohaker/GameOfAnhuiLauncher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/just-anohaker/GameOfAnhuiLauncher/issues"
+  },
+  "homepage": "https://github.com/just-anohaker/GameOfAnhuiLauncher#readme"
+}
