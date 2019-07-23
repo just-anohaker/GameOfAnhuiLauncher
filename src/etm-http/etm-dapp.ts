@@ -85,7 +85,11 @@ class ETMDapp {
     async isTransactionBlocked(trId: string): Promise<boolean> {
         const host = launcher.getDappServer();
         const url = host + `/transactions/${trId}`;
-        const resp = await http.get(url);
+        try {
+            await http.get(url);
+        } catch (error) {
+            return false;
+        }
         // console.log("[isTransactionBlocked]:", trId, JSON.stringify(resp));
         return true;
     }
@@ -93,10 +97,15 @@ class ETMDapp {
     async isTransactionUnconfirmed(trId: string): Promise<boolean> {
         const host = launcher.getDappServer();
         const url = host + `/transactions/unconfirmed`;
-        const resp = await http.get(url);
-        // console.log("[isTransactionUnconfirmed]:", trId, JSON.stringify(resp));
-        let transactions: any[] = resp.data.transactions;
-        return transactions.some(tr => tr.id === trId);
+        try {
+            const resp = await http.get(url);
+            // console.log("[isTransactionUnconfirmed]:", trId, JSON.stringify(resp));
+            let transactions: any[] = resp.data.transactions;
+            return transactions.some(tr => tr.id === trId);
+        } catch (error) {
+            console.log("[isTransactionUnconfirmed] exception:" + error);
+            throw error;
+        }
     }
 }
 
