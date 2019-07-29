@@ -96,7 +96,10 @@ abstract class PeriodStatus implements Period {
                     result = await this.next(this._trDuration);
                 }
             } while (false);
-        } catch (error) { }
+        } catch (error) {
+            // TODO: something error, change to Idle state
+            result = new PeriodIdle();
+        }
 
         return result;
     }
