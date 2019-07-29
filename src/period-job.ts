@@ -85,7 +85,8 @@ abstract class PeriodStatus implements Period {
                         const isTrUnconfirmed = await this._dapp.isTransactionUnconfirmed(this._tr);
                         console.log(`[${this.PeriodName} ${getTime()}] check unconfirmed transaction: ${this._tr} - ${isTrUnconfirmed}`);
                         if (!isTrUnconfirmed) {
-                            this.reset();
+                            // this.reset();
+                            return new PeriodIdle();
                         }
                         break;
                     }
