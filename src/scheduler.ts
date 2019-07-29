@@ -1,4 +1,6 @@
 
+const SCHED_INTERVAL = 300;
+
 export interface Job {
     readonly Id: string;
     callback(duration: number): Promise<void>;
@@ -37,10 +39,10 @@ class Scheduler {
                     }
                 }
             })()
-                .then(() => setTimeout(_tick, 100))
+                .then(() => setTimeout(_tick, SCHED_INTERVAL))
                 .catch(error => {
                     console.log("scheduler catch:", error.toString());
-                    setTimeout(_tick, 100);
+                    setTimeout(_tick, SCHED_INTERVAL);
                 });
         });
     }
