@@ -100,7 +100,7 @@ class ETMDapp {
         try {
             const resp = await http.get(url);
             // console.log("[isTransactionUnconfirmed]:", trId, JSON.stringify(resp));
-            let transactions: any[] = resp.data.transactions;
+            let transactions: any[] = resp.transactions;
             return transactions.some(tr => tr.id === trId);
         } catch (error) {
             console.log("[isTransactionUnconfirmed] exception:" + error);
