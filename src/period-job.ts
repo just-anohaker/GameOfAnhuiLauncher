@@ -3,7 +3,7 @@ import { Job } from "./scheduler";
 import ETMDapp from "./etm-http/etm-dapp";
 import TimeOfTower from "./timeoftower-http/timeoftower";
 import timeline from "./timeline";
-import secrets from "./config/secrets";
+import config from './config/config';
 
 type UpdateResult = Period | undefined;
 
@@ -11,6 +11,7 @@ const trCheckDuration = 5000;
 
 class SecretRandomer {
     static getSecret() {
+        const secrets = config.DappSecrets;
         const count = secrets.length;
         const random = Math.floor(Math.random() * count);
 

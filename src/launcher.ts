@@ -1,6 +1,5 @@
 
-import * as dappCfg from "./config/dapp";
-import * as totCfg from "./config/timeOfTower";
+import config from "./config/config";
 
 export interface ILauncher {
     readonly DappId: string;
@@ -22,17 +21,20 @@ export class Launcher implements ILauncher {
     private _nodeServer: string;
     private _nodePort: number;
 
+    private _totProtocol: string;
     private _totServer: string;
     private _totPort: number;
 
     constructor() {
-        this._dappId = dappCfg.DappId;
-        this._nodeProtocol = dappCfg.etmNodeServerProtocol;
-        this._nodeServer = dappCfg.etmNodeServer;
-        this._nodePort = dappCfg.etmNodePort;
+        this._dappId = config.Dapp.Id;
 
-        this._totServer = totCfg.timeOfTowerServer;
-        this._totPort = totCfg.timeOfTowerPort;
+        this._nodeProtocol = config.Dapp.protocol;
+        this._nodeServer = config.Dapp.hostname;
+        this._nodePort = config.Dapp.port;
+
+        this._totProtocol = config.TimeOfTower.protocol;
+        this._totServer = config.TimeOfTower.hostname;
+        this._totPort = config.TimeOfTower.port;
     }
 
     get DappId() {
@@ -120,7 +122,7 @@ export class Launcher implements ILauncher {
     }
 
     getTimeOfTowerServer(): string {
-        return `http://${this._totServer}:${this._totPort}`;
+        return `${this._totProtocol}://${this._totServer}:${this._totPort}`;
     }
 
 }
