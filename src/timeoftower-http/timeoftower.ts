@@ -3,6 +3,8 @@ import launcher from "../launcher";
 import http from "./";
 
 class TimeOfTower {
+    private static LotteryRequestData = [{ arr: ["1", "2", "3", "4", "5", "6"], size: 3, type: 0 }];
+
     constructor() {
 
     }
@@ -20,11 +22,12 @@ class TimeOfTower {
         const hash = newRandom.randoms[0];
 
         const newLottery = await http.post(this.getLotteryUrl(), {
-            data: [{
-                arr: ["1", "2", "3", "4", "5", "6"],
-                size: 3,
-                type: 0
-            }],
+            // data: [{
+            //     arr: ["1", "2", "3", "4", "5", "6"],
+            //     size: 3,
+            //     type: 0
+            // }],
+            data: TimeOfTower.LotteryRequestData,
             hash
         });
         const points = newLottery.lottery[0];

@@ -10,6 +10,13 @@ type Period = {
     endTr?: string;
 }
 
+type RequestBody = {
+    secret: string;
+    fee: string;
+    type: number;
+    args: string;
+}
+
 class ETMDapp {
     constructor() {
 
@@ -24,37 +31,46 @@ class ETMDapp {
         return this.getUrl("/transactions/unsigned");
     }
 
-    async startPeriod(secret: string, periodId: string): Promise<any> {
-        const body = {
+    private buildRequestBody(secret: string, args: any, type: number, fee: string = "0"): RequestBody {
+        return {
             secret,
-            fee: "0",
-            type: 1100,
-            args: JSON.stringify([periodId])
+            fee,
+            type,
+            args: JSON.stringify(args)
         };
+    }
 
-        return await http.put(this.getTransactionUnsignedUrl(), body);
+    async startPeriod(secret: string, periodId: string): Promise<any> {
+        // const body = {
+        //     secret,
+        //     fee: "0",
+        //     type: 1100,
+        //     args: JSON.stringify([periodId])
+        // };
+
+        return await http.put(this.getTransactionUnsignedUrl(), this.buildRequestBody(secret, [periodId], 1100));
     }
 
     async mothballPeriod(secret: string, periodId: string): Promise<any> {
-        const body = {
-            secret,
-            fee: "0",
-            type: 1101,
-            args: JSON.stringify([periodId])
-        };
+        // const body = {
+        //     secret,
+        //     fee: "0",
+        //     type: 1101,
+        //     args: JSON.stringify([periodId])
+        // };
 
-        return await http.put(this.getTransactionUnsignedUrl(), body);
+        return await http.put(this.getTransactionUnsignedUrl(), this.buildRequestBody(secret, [periodId], 1101));
     }
 
     async endPeriod(secret: string, periodId: string, points: string[], hash: string): Promise<any> {
-        const body = {
-            secret,
-            fee: "0",
-            type: 1102,
-            args: JSON.stringify([periodId, points, hash])
-        };
+        // const body = {
+        //     secret,
+        //     fee: "0",
+        //     type: 1102,
+        //     args: JSON.stringify([periodId, points, hash])
+        // };
 
-        return await http.put(this.getTransactionUnsignedUrl(), body);
+        return await http.put(this.getTransactionUnsignedUrl(), this.buildRequestBody(secret, [periodId, points, hash], 1102));
     }
 
     async getCurrentPeriod(): Promise<Period | undefined> {
