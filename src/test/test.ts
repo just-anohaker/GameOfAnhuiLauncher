@@ -82,7 +82,6 @@ if (require.main === module) {
     console.log(JSON.stringify(splitResult, null, 2));
 
     const currentPeriodId = timeline.getCurrentPeriodId();
-    console.log(timeline.getOriginSlot());
     console.log(timeline.getCurrentPeriodId());
     console.log(timeline.getStartSlot(timeline.getCurrentPeriodId()!));
     console.log(timeline.getNextPeriodId(timeline.getCurrentPeriodId()!));

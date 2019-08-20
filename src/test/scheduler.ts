@@ -3,37 +3,37 @@ const SCHED_INTERVAL = 300;
 
 export interface Job {
     readonly Id: string;
-    callback(duration: number): Promise<void>;
+    doJob(duration: number): Promise<void>;
 }
 
 class Scheduler {
     private _jobs: Map<string, Job>;
     private _jobIds: string[];
 
-    private _tickDuration: number;
+    private _lastTick: number;
 
     constructor() {
         this._jobs = new Map<string, Job>();
         this._jobIds = [];
 
-        this._tickDuration = 0;
+        this._lastTick = 0;
     }
 
     async run() {
         const self = this;
-        this._tickDuration = Math.floor(process.uptime() * 1000);
+        self._lastTick = Math.floor(process.uptime() * 1000);
         setImmediate(function _tick() {
-            const newUptime = Math.floor(process.uptime() * 1000);
-            const duration = newUptime - self._tickDuration;
-            self._tickDuration = newUptime;
+            const now = Math.floor(process.uptime() * 1000);
+            const tickDuration = now - self._lastTick;
+            self._lastTick = now;
             (async () => {
                 const jobIds = self._jobIds.slice();
-                const jobsCopy = new Map<string, Job>();
-                self._jobs.forEach((job, key) => jobsCopy.set(key, job));
+                const jobs = new Map<string, Job>();
+                self._jobs.forEach((job, key) => jobs.set(key, job));
                 for (let key of jobIds) {
-                    const job = jobsCopy.get(key)!;
+                    const job = jobs.get(key)!;
                     try {
-                        await job.callback(duration);
+                        await job.doJob(tickDuration);
                     } catch (error) {
                         console.log(`job[${job.Id}] error: ${error.toString()}`);
                     }

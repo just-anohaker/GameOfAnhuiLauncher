@@ -1,14 +1,8 @@
 
 import axios = require("axios");
 
-export interface ITOTHttp {
-    get(url: string, params: {}, timeout: number): Promise<any>;
-
-    post(url: string, body: {}, timeout: number): Promise<any>;
-}
-
-export class TOTHttp implements ITOTHttp {
-    async get(url: string, params: {} = {}, timeout: number = 4000): Promise<any> {
+export class TOTHttp {
+    static async get(url: string, params: {} = {}, timeout: number = 4000): Promise<any> {
         try {
             const { data } = await axios.default.get(url, { params, timeout });
             if (!data.success) {
@@ -21,7 +15,7 @@ export class TOTHttp implements ITOTHttp {
         }
     }
 
-    async post(url: string, body: {} = {}, timeout: number = 4000): Promise<any> {
+    static async post(url: string, body: {} = {}, timeout: number = 4000): Promise<any> {
         try {
             const { data } = await axios.default.post(url, body, { timeout });
             if (!data.success) {
@@ -35,6 +29,4 @@ export class TOTHttp implements ITOTHttp {
     }
 }
 
-const http = new TOTHttp();
-
-export default http;
+export default TOTHttp;

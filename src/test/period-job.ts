@@ -225,26 +225,20 @@ class PeriodIdle implements Period {
 }
 
 class PeriodJob implements Job {
-    private _id: string;
-    private _periodInfo?: Period;
+    private _periodInfo: Period;
 
     constructor() {
-        this._id = "schedId_period";
+        this._periodInfo = new PeriodIdle();
     }
 
     get Id() {
-        return this._id;
+        return "schedId_period";
     }
 
-    async callback(duration: number): Promise<void> {
-        if (this._periodInfo === undefined) {
-            this._periodInfo = new PeriodIdle();
-        }
-        const changeNext = await this._periodInfo.update(duration);
+    async doJob(duration: number): Promise<void> {
+        const next = await this._periodInfo.update(duration);
         // console.log("PeriodJob callback called.", this._periodInfo, changeNext);
-        if (changeNext) {
-            this._periodInfo = changeNext;
-        }
+        this._periodInfo = next ? next : this._periodInfo;
     }
 }
 
