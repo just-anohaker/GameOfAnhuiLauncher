@@ -63,8 +63,9 @@ class Period {
         const now = Date.now();
         const nextPeriod = this.NextPeriod;
         if (nextPeriod === undefined) {
-            return true
-            // return now >= this.EndTime;
+            // 今天开盘结束
+            const current = Period.current();
+            return current === undefined ? true : false;
         }
         return now >= this.EndTime && now < nextPeriod.StartTime;
     }
@@ -83,7 +84,7 @@ class Period {
     }
 
     get NextPeriod(): Period | undefined {
-        if (this.periodId > MAX_PERIODID_PER_DAY) {
+        if (this.periodId + 1 > MAX_PERIODID_PER_DAY) {
             return undefined;
         }
 
