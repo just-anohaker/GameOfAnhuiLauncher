@@ -28,7 +28,7 @@ class IdleState extends AbstractState {
         try {
             const currentPeriod = await this.Entanmo.getCurrentPeriod();
             if (currentPeriod) {
-                console.log(`[app ${this.LogTime}] tick(${this.Name}) id(${currentPeriod!.id}), status(${currentPeriod!.status})`);
+                console.log(`[app ${this.LogTime}] tick(${this.Name}) [${currentPeriod!.id},${currentPeriod!.status}]`);
             }
             if (currentPeriod === undefined /* || currentPeriod.status === 2 */) {
                 this.duration += elapsed;

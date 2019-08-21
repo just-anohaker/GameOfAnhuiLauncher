@@ -8,7 +8,7 @@ class StartState extends BaseState {
     constructor(facade: IFacade, period: Period, tr: string = "", trBlocked: boolean = false) {
         super(facade, period, tr, trBlocked);
 
-        console.log(`[app ${this.LogTime}] ctor(${this.Name}) [${period.toString()}, ${tr ? tr : "--"}, ${trBlocked}]`);
+        console.log(`[app ${this.LogTime}] ctor(${this.Name}) [${period.toString()},${tr ? tr : "--"},${trBlocked}]`);
     }
 
     /// @overwrite
