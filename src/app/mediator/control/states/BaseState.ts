@@ -24,6 +24,7 @@ abstract class BaseState extends AbstractState {
         this.blockedElapsed = blockedElapsed;
     }
 
+    // @overwrite
     async tick(elapsed: number): Promise<AbstractState | undefined> {
         let result: AbstractState | undefined = undefined;
         try {
@@ -31,7 +32,7 @@ abstract class BaseState extends AbstractState {
                 if (this.tr === "") {
                     const job = await this.doJob(this.period);
                     this.reset(job.transactionId);
-                    console.log(`[app ${this.LogTime}] commit tr[${this.period.toString()}, ${job.transactionId}]`);
+                    console.log(`[app ${this.LogTime}] tick(${this.Name}) commit tr[${this.period.toString()}, ${job.transactionId}]`);
                     break;
                 }
 
@@ -43,10 +44,10 @@ abstract class BaseState extends AbstractState {
 
                     this.blockedElapsed = elapsed;
                     const blocked = await this.Entanmo.isTransactionBlocked(this.tr);
-                    console.log(`[app ${this.LogTime}] blocked tr[${this.tr}, ${blocked}]`);
+                    console.log(`[app ${this.LogTime}] tick(${this.Name}) blocked tr[${this.tr}, ${blocked}]`);
                     if (!blocked) {
                         const unconfirmed = await this.Entanmo.isTransactionUnconfirmed(this.tr);
-                        console.log(`[app ${this.LogTime}] unconfirmed tr[${this.tr}, ${unconfirmed}]`);
+                        console.log(`[app ${this.LogTime}] tick(${this.Name}) unconfirmed tr[${this.tr}, ${unconfirmed}]`);
                         result = unconfirmed ? undefined : new IdleState(this.facade);
                         break;
                     }

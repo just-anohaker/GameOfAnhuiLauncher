@@ -8,6 +8,7 @@ abstract class AbstractState {
         this.facade = facade;
     }
 
+    abstract get Name(): string;
     abstract async tick(elapsed: number): Promise<AbstractState | undefined>;
 
     protected get Entanmo(): EntanmoProxy {

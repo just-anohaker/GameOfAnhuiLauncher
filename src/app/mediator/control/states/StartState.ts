@@ -8,13 +8,20 @@ class StartState extends BaseState {
     constructor(facade: IFacade, period: Period, tr: string = "", trBlocked: boolean = false) {
         super(facade, period, tr, trBlocked);
 
-        console.log(`[app ${this.LogTime}] ctor(StartState) [${period.toString()}, ${tr ? tr : "--"}, ${trBlocked}]`);
+        console.log(`[app ${this.LogTime}] ctor(${this.Name}) [${period.toString()}, ${tr ? tr : "--"}, ${trBlocked}]`);
     }
 
+    /// @overwrite
+    get Name(): string {
+        return "StartState";
+    }
+
+    /// @overwrite
     async doJob(period: Period): Promise<any> {
         return await this.Entanmo.startPeriod(period.Id);
     }
 
+    /// @overwrite
     async next(elapsed: number): Promise<AbstractState | undefined> {
         if (!this.period.inStart()) {
             return new MothballPeriod(this.facade, this.period);

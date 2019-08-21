@@ -15,14 +15,20 @@ class IdleState extends AbstractState {
 
         this.duration = 0;
 
-        console.log(`[app ${this.LogTime}] ctor(IdleState)`);
+        console.log(`[app ${this.LogTime}] ctor(${this.Name})`);
     }
 
+    /// @overwrite
+    get Name(): string {
+        return "IdleState";
+    }
+
+    /// @overwrite
     async tick(elapsed: number): Promise<AbstractState | undefined> {
         try {
             const currentPeriod = await this.Entanmo.getCurrentPeriod();
             if (currentPeriod) {
-                console.log(`[app ${this.LogTime}] tick(IdleState) id(${currentPeriod!.id}), status(${currentPeriod!.status})`);
+                console.log(`[app ${this.LogTime}] tick(${this.Name}) id(${currentPeriod!.id}), status(${currentPeriod!.status})`);
             }
             if (currentPeriod === undefined /* || currentPeriod.status === 2 */) {
                 this.duration += elapsed;
