@@ -65,7 +65,11 @@ class Period {
         if (nextPeriod === undefined) {
             // 今天开盘结束
             const current = Period.current();
-            return current === undefined ? true : false;
+            if (current === undefined || this.equals(current)) {
+                return true;
+            }
+
+            return false;
         }
         return now >= this.EndTime && now < nextPeriod.StartTime;
     }
@@ -105,6 +109,13 @@ class Period {
         const d = this.date.toString().padStart(2, "0");
         const periodId = this.periodId.toString().padStart(3, "0");
         return `${y}${m}${d}-${periodId}`;
+    }
+
+    equals(period: Period): boolean {
+        return (this.year === period.year
+            && this.month === period.month
+            && this.date === period.date
+            && this.periodId === period.periodId);
     }
 }
 
